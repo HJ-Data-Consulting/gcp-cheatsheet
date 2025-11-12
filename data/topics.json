@@ -1,0 +1,23 @@
+[
+  {
+    "id": "cloud-storage",
+    "name": "Cloud Storage",
+    "description": "Object storage service for storing and serving data"
+  },
+  {
+    "id": "compute-engine",
+    "name": "Compute Engine",
+    "description": "Virtual machines running on Google's infrastructure"
+  },
+  {
+    "id": "cloud-functions",
+    "name": "Cloud Functions",
+    "description": "Serverless functions that run in response to events"
+  },
+  {
+    "id": "bigquery",
+    "name": "BigQuery",
+    "description": "Serverless data warehouse for analytics"
+  }
+]
+

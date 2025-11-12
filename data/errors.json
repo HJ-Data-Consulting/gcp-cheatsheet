@@ -1,0 +1,21 @@
+[
+  {
+    "id": "storage-403",
+    "service": "Cloud Storage",
+    "errorCode": "403",
+    "errorMessage": "Access Denied",
+    "resolution": "# Resolving 403 Access Denied Error\n\n## Common Causes\n\n1. **IAM Permissions**: User lacks necessary IAM roles\n2. **Bucket Policy**: Bucket-level permissions are restrictive\n3. **ACL Settings**: Object ACLs may be blocking access\n\n## Solutions\n\n### Check IAM Permissions\n```bash\ngcloud projects get-iam-policy PROJECT_ID\n```\n\n### Grant Storage Object Viewer Role\n```bash\ngcloud projects add-iam-policy-binding PROJECT_ID \\\n  --member=\"user:EMAIL\" \\\n  --role=\"roles/storage.objectViewer\"\n```\n\n### Verify Bucket Permissions\n- Check bucket IAM policy\n- Review object ACLs\n- Ensure service account has proper access",
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "compute-quota",
+    "service": "Compute Engine",
+    "errorCode": "QUOTA_EXCEEDED",
+    "errorMessage": "Quota 'INSTANCES' exceeded",
+    "resolution": "# Resolving Compute Engine Quota Exceeded Error\n\n## Understanding Quotas\n\nGCP enforces quotas to prevent unexpected charges and ensure fair resource usage.\n\n## Solutions\n\n### 1. Check Current Quota Usage\n```bash\ngcloud compute project-info describe --project=PROJECT_ID\n```\n\n### 2. Request Quota Increase\n1. Go to IAM & Admin > Quotas\n2. Filter by \"Compute Engine API\"\n3. Select the quota to increase\n4. Click \"Edit Quotas\"\n5. Request new limit\n\n### 3. Delete Unused Instances\n- Review running instances\n- Stop or delete instances not in use\n- Use preemptible instances for cost savings",
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-01T00:00:00Z"
+  }
+]
+
