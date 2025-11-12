@@ -22,6 +22,7 @@ export const authOptions: NextAuthOptions = {
             id: '1',
             name: 'Admin',
             email: 'admin@example.com',
+            role: 'admin', // Add role here
           };
         }
         return null;
@@ -33,6 +34,22 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: 'jwt',
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      // Persist the role after sign-in
+      if (user) {
+        token.role = user.role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Send role to the client
+      if (session.user) {
+        session.user.role = token.role as string;
+      }
+      return session;
+    },
   },
   secret: process.env.NEXTAUTH_SECRET || 'your-secret-key-change-in-production',
 };

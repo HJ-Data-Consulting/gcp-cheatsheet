@@ -64,268 +64,147 @@ This document outlines the current application structure and where Google Docs A
   - `/api/admin/errors` - GET, POST
   - `/api/admin/errors/[id]` - GET, PUT, DELETE
 
-## Proposed Integration Architecture
+## Implemented Integration Architecture
 
-### 1. Google Docs Mapping Strategy
+### 1. Authentication
 
-**Option A: One Doc per Content Item**
-- Each Google Doc represents one Article, Topic, or Error
-- Doc ID or URL maps to content ID
-- Document title = content title
-- Document body = content body
+The integration uses Google Cloud's **Application Default Credentials (ADC)** strategy, which is secure and flexible, avoiding the need for managing and storing API keys.
 
-**Option B: Structured Master Document**
-- One or more master Google Docs with structured sections
-- Use headings/formatting to identify content types
-- Parse document structure to extract multiple items
+#### **A. Production Environment (GCP VM)**
+- **Method**: A GCP Service Account is attached directly to the Compute Engine VM.
+- **Process**: The application automatically acquires credentials from the VM's metadata server. No keys are stored in the environment.
+- **Setup**:
+    1. Create a Service Account in GCP.
+    2. When creating the VM, attach this service account in the "Identity and API access" section.
+    3. Grant the VM "Allow full access to all Cloud APIs" scope.
+    4. Share the relevant Google Drive folders with the Service Account's email address.
 
-**Option C: Folder-based Organization**
-- Google Drive folder structure mirrors content organization
-- Each folder = Topic
-- Each doc in folder = Article or Error
+#### **B. Local Development Environment**
+- **Method**: Uses your personal user credentials via the `gcloud` CLI.
+- **Process**: The application automatically finds credentials you've authorized locally.
+- **Setup**:
+    1. Install the `gcloud` CLI.
+    2. Run `gcloud auth application-default login` in your terminal and follow the prompts.
+    3. Share the relevant Google Drive folders with your personal Google account email.
 
-### 2. Integration Components Needed
+### 2. Google Docs Mapping Strategy
+
+The implementation uses **Option C: Folder-based Organization**.
+
+- A root Google Drive folder contains sub-folders for `Articles`, `Topics`, and `Errors`.
+- Each document within these folders corresponds to a single content item.
+- Metadata (like `id`, `topicId`, `errorCode`) is stored in a **frontmatter** block at the top of each document.
+
+### 3. Integration Components
 
 #### A. Google Docs API Service Layer
-**Location**: `/lib/google-docs.ts` (new file)
+**Location**: `/lib/google-docs-auth.ts`, `/lib/google-docs-parser.ts`, `/lib/google-docs.ts`
 
-**Functions needed**:
+**Implemented Functions**:
 ```typescript
 // Authentication
-authenticateWithGoogleDocs(): Promise<GoogleAuth>
+authenticateWithGoogle(): Promise<Auth.AuthClient>
 
 // Document operations
-fetchDocument(docId: string): Promise<GoogleDoc>
-parseDocumentToContent(doc: GoogleDoc, contentType: 'article' | 'error' | 'topic'): Content
-watchDocument(docId: string, webhookUrl: string): Promise<WatchResponse>
+parseGoogleDoc(auth: Auth.AuthClient, fileId: string): Promise<ParsedDocument>
 
 // Batch operations
-fetchAllDocuments(folderId?: string): Promise<GoogleDoc[]>
-syncAllDocuments(): Promise<void>
+syncGoogleDocs(): Promise<void>
 ```
 
-#### B. Webhook Handler
-**Location**: `/app/api/webhooks/google-docs/route.ts` (new file)
-
-**Purpose**: Receive notifications when Google Docs are updated
-
-**Endpoint**: `POST /api/webhooks/google-docs`
-
-**Expected payload** (from Google):
-```json
-{
-  "message": {
-    "data": "base64-encoded-notification",
-    "messageId": "string",
-    "publishTime": "timestamp"
-  },
-  "subscription": "string"
-}
-```
-
-**Handler logic**:
-1. Decode notification
-2. Extract document ID
-3. Fetch updated document from Google Docs API
-4. Parse document content
-5. Update corresponding JSON file
-6. Optionally trigger site rebuild/redeploy
+#### B. Webhook Handler (Future)
+**Location**: `/app/api/webhooks/google-docs/route.ts` (stubbed)
 
 #### C. Sync Service
-**Location**: `/app/api/sync/google-docs/route.ts` (new file)
-
-**Purpose**: Manual or scheduled sync of all documents
-
+**Location**: `/app/api/sync/google-docs/route.ts`
+**Purpose**: A manually triggered, admin-only endpoint to sync all documents.
 **Endpoint**: `POST /api/sync/google-docs`
 
-**Query parameters**:
-- `force`: boolean - Force sync even if no changes detected
-- `type`: 'all' | 'topics' | 'articles' | 'errors' - Sync specific content type
+### 4. Document Parsing Logic
 
-#### D. Configuration
-**Location**: `/lib/google-docs-config.ts` (new file)
+- **Markdown Conversion**: Docs are exported as HTML via the Drive API, and the `turndown` library converts the HTML to Markdown.
+- **Metadata**: A YAML "frontmatter" block (enclosed in `---`) at the top of each doc is parsed for metadata.
 
-**Configuration structure**:
-```typescript
-interface GoogleDocsConfig {
-  // Document mappings
-  documentMappings: {
-    [docId: string]: {
-      type: 'topic' | 'article' | 'error';
-      contentId: string; // Maps to existing id in JSON
-      topicId?: string; // For articles
-    };
-  };
-  
-  // Folder mappings (if using folder structure)
-  folderMappings?: {
-    [folderId: string]: {
-      type: 'topic';
-      topicId: string;
-    };
-  };
-  
-  // Webhook configuration
-  webhookUrl: string;
-  webhookSecret?: string;
-}
-```
-
-**Storage**: Could be in:
-- Environment variables (simple)
-- JSON file: `/data/google-docs-mappings.json`
-- Database (if migrated from JSON)
-
-### 3. Document Parsing Logic
-
-#### Markdown Conversion
-Google Docs content needs to be converted to Markdown format for storage.
-
-**Considerations**:
-- Headers → Markdown headers (#, ##, ###)
-- Bold/Italic → **bold**, *italic*
-- Lists → Markdown lists
-- Links → [text](url)
-- Code blocks → ```code```
-- Tables → Markdown tables (if supported)
-
-**Library options**:
-- `mammoth` - Convert .docx to HTML, then to Markdown
-- `google-docs-to-markdown` - Direct conversion
-- Custom parser using Google Docs API formatting
-
-#### Content Type Detection
-Need logic to determine if a document is:
-- A Topic (short description)
-- An Article (longer content, belongs to topic)
-- An Error (has error code, service name, resolution)
-
-**Detection methods**:
-1. Document naming convention (e.g., "error-403-storage.md")
-2. Document metadata/custom properties
-3. Document structure (headings, sections)
-4. Folder location
-
-### 4. File Structure
+### 5. File Structure
 
 ```
 gcp-cheatsheet/
 ├── app/
 │   ├── api/
-│   │   ├── webhooks/
+│   │   ├── auth/[...nextauth]/
+│   │   │   └── route.ts              # NextAuth.js configuration
+│   │   ├── sync/
 │   │   │   └── google-docs/
-│   │   │       └── route.ts          # Webhook handler
-│   │   └── sync/
+│   │   │       └── route.ts          # Manual sync endpoint
+│   │   └── webhooks/
 │   │       └── google-docs/
-│   │           └── route.ts          # Manual sync endpoint
+│   │           └── route.ts          # Webhook handler (Future)
 │   └── ...
 ├── lib/
-│   ├── data.ts                       # Existing data layer
-│   ├── google-docs.ts                # Google Docs API service (NEW)
-│   ├── google-docs-config.ts         # Configuration (NEW)
-│   └── google-docs-parser.ts         # Document parsing (NEW)
-├── data/
-│   ├── topics.json
-│   ├── articles.json
-│   ├── errors.json
-│   └── google-docs-mappings.json     # Doc ID to content mapping (NEW)
+│   ├── google-docs-auth.ts           # Google authentication service (NEW)
+│   ├── google-docs-parser.ts         # Document parsing service (NEW)
+│   ├── google-docs.ts                # Main Google Docs service (NEW)
+│   └── ...
 └── ...
 ```
 
-### 5. Environment Variables Needed
+### 6. Environment Variables Needed
 
 ```env
-# Google Docs API
-GOOGLE_DOCS_CLIENT_ID=your-client-id
-GOOGLE_DOCS_CLIENT_SECRET=your-client-secret
-GOOGLE_DOCS_REDIRECT_URI=http://localhost:3000/api/auth/google/callback
-GOOGLE_DOCS_REFRESH_TOKEN=your-refresh-token
+# Folder IDs from Google Drive
+GOOGLE_DOCS_TOPICS_FOLDER_ID=your_folder_id
+GOOGLE_DOCS_ARTICLES_FOLDER_ID=your_folder_id
+GOOGLE_DOCS_ERRORS_FOLDER_ID=your_folder_id
 
-# Webhook configuration
-GOOGLE_DOCS_WEBHOOK_URL=https://your-domain.com/api/webhooks/google-docs
-GOOGLE_DOCS_WEBHOOK_SECRET=your-webhook-secret
+# Credentials for the site's admin panel
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=your_secure_password
 
-# Optional: Folder/document IDs
-GOOGLE_DOCS_ROOT_FOLDER_ID=your-folder-id
-GOOGLE_DOCS_MAPPINGS_FILE=./data/google-docs-mappings.json
+# Secret for NextAuth.js session encryption
+# Generate with `openssl rand -base64 32`
+NEXTAUTH_SECRET=your_generated_secret
 ```
 
-### 6. Dependencies to Add
+### 7. Dependencies Added
 
 ```json
 {
   "dependencies": {
-    "googleapis": "^latest",           // Google APIs client
-    "@google-cloud/docs-parser": "...", // If available
-    "turndown": "^latest",             // HTML to Markdown (if needed)
-    "mammoth": "^latest"               // DOCX to HTML (if needed)
+    "googleapis": "^latest",
+    "google-auth-library": "^latest",
+    "turndown": "^latest",
+    "js-yaml": "^latest"
+  },
+  "devDependencies": {
+    "@types/turndown": "^latest",
+    "@types/js-yaml": "^latest"
   }
 }
 ```
 
-### 7. Workflow
+### 8. Workflow
 
 #### Initial Setup
-1. Authenticate with Google Docs API
-2. Set up document watching/webhooks
-3. Create document mappings (doc ID → content ID)
-4. Perform initial sync
-
-#### Update Flow
-1. User updates Google Doc
-2. Google sends webhook notification
-3. Webhook handler receives notification
-4. Fetch updated document
-5. Parse document content
-6. Update corresponding JSON file
-7. (Optional) Trigger site rebuild/redeploy
-
-#### Sync Flow (Manual/Scheduled)
-1. Fetch all documents from configured folders
-2. Compare with current JSON data (by last modified time)
-3. Update changed documents
-4. Save to JSON files
-
-### 8. Error Handling
-
-**Considerations**:
-- Handle API rate limits
-- Retry logic for failed requests
-- Logging for debugging
-- Validation of parsed content
-- Rollback mechanism if update fails
-- Notification system for sync failures
+1. Configure Application Default Credentials for your environment (local or production).
+2. Set the required environment variables in `.env.local`.
+3. Create the folder structure in Google Drive and share the folders.
+4. Run the application and log in to the admin panel.
+5. Trigger an initial sync by sending a `POST` request to `/api/sync/google-docs`.
 
 ### 9. Security
 
 **Requirements**:
-- Secure storage of OAuth credentials
-- Webhook signature verification
-- Rate limiting on webhook endpoint
-- Admin-only access to sync endpoint
-- Validation of document content before saving
+- **Secure Authentication**: The use of Application Default Credentials avoids storing secrets for the Google API.
+- **Admin-only Sync**: The sync endpoint is protected and requires an authenticated admin user.
+- **Webhook Security (Future)**: Webhook signature verification will be needed.
 
-### 10. Testing Strategy
+### 10. Unanswered Questions
 
-**Test scenarios**:
-- Document creation → Content creation
-- Document update → Content update
-- Document deletion → Content deletion (or archive)
-- Multiple documents updated simultaneously
-- Invalid document format handling
-- API failure recovery
-- Webhook replay attacks prevention
+The following questions from the original document will be relevant for future phases:
 
-## Questions for Gemini Implementation
-
-1. **Authentication**: What's the best OAuth flow for server-to-server Google Docs API access?
-2. **Webhooks**: How to set up and verify Google Docs change notifications?
-3. **Parsing**: Best approach to convert Google Docs format to Markdown?
-4. **Rate Limits**: How to handle Google Docs API rate limits?
-5. **Batch Operations**: How to efficiently sync multiple documents?
-6. **Document Structure**: Recommended structure for organizing content in Google Docs?
-7. **Change Detection**: How to detect what changed in a document (not just that it changed)?
-8. **Deployment**: How to handle webhook URLs in GCP deployment?
+1. **Webhooks**: How to set up and verify Google Docs change notifications?
+2. **Change Detection**: How to detect what changed in a document (not just that it changed)?
+3. **Deployment**: How to handle webhook URLs in GCP deployment?
 
 ## Current App Context
 
