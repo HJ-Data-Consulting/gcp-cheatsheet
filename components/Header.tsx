@@ -10,7 +10,7 @@ export default function Header() {
             GCP Cheat Sheet
           </Link>
           <nav className="flex items-center gap-6">
-            <Link href="/" className="text-gray-700 hover:text-gray-900">
+            <Link href="/topics" className="text-gray-700 hover:text-gray-900">
               Topics
             </Link>
             <Link href="/errors" className="text-gray-700 hover:text-gray-900">
