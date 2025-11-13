@@ -14,12 +14,12 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+  font-family: 'Courier New', monospace;
 }
 
 /* Code blocks styling */
 code {
-  font-family: 'Roboto Mono', 'Courier New', monospace;
+  font-family: 'Courier New', monospace;
   font-size: 0.875rem;
   line-height: 1.5;
 }
