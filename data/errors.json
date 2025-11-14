@@ -1,18 +1,38 @@
 [
   {
-    "id": "1pqg8lOWWQjt2wEDXBI3qDgqTwbgJ2bsYud6ACODBymc",
-    "errorMessage": "Copy of Copy of GCP Compute Engine",
-    "resolution": "\\---\n\nid: \"gcp-compute-engine\"\n\n\\---\n\nThis document provides an overview of Google Compute Engine, including its\n\nfeatures, benefits, and common use cases.",
-    "createdAt": "2025-11-13T18:51:02.135Z",
-    "updatedAt": "2025-11-13T18:51:02.135Z"
+    "id": "error-1763136400204",
+    "service": "Cloud Shell / Local",
+    "errorCode": "COMMAND_NOT_FOUND",
+    "errorMessage": "After installing a tool, my terminal says '-bash: tool-name: command not found'",
+    "resolution": "This is a classic! It usually means your system's `PATH` isn't aware of where the new tool was installed. Here are a few things to check:\n\n1.  **Restart Your Terminal:** The simplest solution. Sometimes the shell just needs to be reloaded to pick up changes to your profile.\n2.  **Check Installation Notes:** Did the tool's installer print any messages like `You may need to add /path/to/bin to your PATH`? If so, follow those instructions.\n3.  **Check Your Profile:** Look in your `~/.bashrc`, `~/.zshrc`, or `~/.profile` file to see if a line was added during installation. If it was, you can manually 'source' that file (e.g., `source ~/.bashrc`) or open a new terminal.",
+    "createdAt": "2025-11-14T16:06:40.204Z",
+    "updatedAt": "2025-11-14T18:40:30.000Z"
   },
   {
-    "id": "error-1763136400204",
-    "service": "Cloud Shell, Cloud Compute",
-    "errorCode": "-bash: gemini: command not found",
-    "errorMessage": "-bash: gemini: command not found",
-    "resolution": "1. Check for Appropriate Node Version\n\nnvm ls\n\n2. Check for Storage in cloud shell\n\ndf -h",
-    "createdAt": "2025-11-14T16:06:40.204Z",
-    "updatedAt": "2025-11-14T16:06:40.204Z"
+    "id": "error-1763138430001",
+    "service": "Compute Engine / Networking",
+    "errorCode": "CONNECTION_REFUSED",
+    "errorMessage": "I can't connect to a web server (like Next.js) running on my GCP VM.",
+    "resolution": "Since GCP VMs have a private IP, you can't access `localhost` directly from your browser. The best practice for development is to use SSH port forwarding.\n\n1.  **Stop your current SSH session.**\n2.  **Reconnect with a port forwarding flag.** This command forwards the VM's port 3000 to your local machine's port 8080.\n\n```bash\ngcloud compute ssh YOUR_VM_NAME --zone=YOUR_ZONE -- -L 8080:localhost:3000\n```\n\n3.  **Start your web server** on the VM again (`npm run dev`).\n4.  **Access it locally** by going to `http://localhost:8080` in your browser.\n\nThis keeps your development secure without exposing your VM's ports to the public internet.",
+    "createdAt": "2025-11-14T18:40:30.000Z",
+    "updatedAt": "2025-11-14T18:40:30.000Z"
+  },
+  {
+    "id": "error-1763138430002",
+    "service": "Deployment / PM2",
+    "errorCode": "PROCESS_TERMINATED",
+    "errorMessage": "My application stops running as soon as I close the SSH terminal.",
+    "resolution": "This happens because the process is tied to your terminal session. To keep it running forever, you need a process manager.\n\nI highly recommend `pm2`. It's a simple and powerful tool for managing Node.js applications.\n\n**1. Install PM2:**\n```bash\nsudo npm install pm2 -g\n```\n\n**2. Start Your App with PM2:**\nInstead of `npm start`, use `pm2` to run your start script. This gives it a name and runs it in the background.\n```bash\npm2 start npm --name your-app-name -- start\n```\n\n**3. Check Status:**\nYou can see logs, status, and more with these commands:\n```bash\npm2 status\npm2 logs your-app-name\n```\nYour app will now automatically restart if it crashes and will continue running after you disconnect.",
+    "createdAt": "2025-11-14T18:40:30.000Z",
+    "updatedAt": "2025-11-14T18:40:30.000Z"
+  },
+  {
+    "id": "error-1763138430003",
+    "service": "Deployment / Nginx",
+    "errorCode": "502_BAD_GATEWAY",
+    "errorMessage": "I've set up Nginx as a reverse proxy, but I'm seeing a '502 Bad Gateway' error.",
+    "resolution": "A 502 error almost always means one thing: Nginx is working, but it can't communicate with the application it's supposed to be proxying traffic to (e.g., your Node.js app running on port 3000).\n\nHere’s how to troubleshoot it:\n\n1.  **Is Your Application Actually Running?** Use `pm2 status` to make sure your application is online and hasn't crashed.\n2.  **Are You on the Right Port?** Double-check your Nginx config file (`/etc/nginx/sites-available/your-site`). The `proxy_pass` directive should point to the exact port your app is running on (e.g., `proxy_pass http://localhost:3000;`).\n3.  **Firewall Rules:** Could a firewall be blocking Nginx from talking to your app? While less common for `localhost` traffic, ensure your VM's firewall rules aren't blocking the application's port.",
+    "createdAt": "2025-11-14T18:40:30.000Z",
+    "updatedAt": "2025-11-14T18:40:30.000Z"
   }
 ]

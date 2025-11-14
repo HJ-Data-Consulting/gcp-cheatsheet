@@ -2,57 +2,49 @@
   {
     "id": "article-1763135613426",
     "topicId": "topic-1763135434515",
-    "title": "GCP Project Structure Best Practices",
-    "content": "# Understanding GCP Projects\n\n## What is a Project?\n- Fundamental container for all GCP resources\n- Complete isolation between projects\n- Independent billing and IAM\n\n## Best Practices\n- Separate projects for prod, dev, staging\n- Use a sandbox project for experiments\n- Never mix environments in one project\n\n## Example Structure\n\nyour-startup/\n├── app-prod\n├── app-dev\n├── app-staging\n└── sandbox",
+    "title": "GCP Project Structure: A Startup's Guide",
+    "content": "In Google Cloud, the **Project** is the most important organizing concept. Think of it as a self-contained universe for your work. Getting your project structure right from day one is one of the best things you can do for your startup's future sanity and security.\n\n### What is a Project?\n\n- **Resource Container:** All your resources—VMs, databases, storage buckets, etc.—live inside a project.\n- **Total Isolation:** Resources in `project-a` are completely separate from `project-b`. They can't see or talk to each other unless you explicitly allow it.\n- **Billing Boundary:** Costs are tracked per project. You'll know exactly how much your production environment is costing you versus development.\n- **IAM Boundary:** Permissions are managed at the project level. You can give your dev team full access to the `dev-project` without ever letting them touch `prod-project`.\n\n### The Standard Three-Project Setup\n\nThe industry-standard approach is to have separate projects for each environment. For a single application, this looks like:\n\n1.  **`my-app-prod`**: For your live, customer-facing application. Access is highly restricted.\n2.  **`my-app-dev`**: A mirror of production for your development team. Permissions are more relaxed here.\n3.  **`sandbox`**: A personal playground for individual developers to experiment with new ideas unrelated to the main app.\n\nThis model provides maximum security and clarity, preventing costly mistakes and making it easy to manage costs.",
     "createdAt": "2025-11-14T15:53:33.426Z",
-    "updatedAt": "2025-11-14T15:53:33.426Z"
-  },
-  {
-    "id": "article-1763135742832",
-    "topicId": "topic-1763135434515",
-    "title": "Dev vs Prod: Environment Separation Strategy",
-    "content": "##Content:\n\n###Why separate environments matter\n###Security benefits of isolation\n###Cost management per environment\n###Scaling considerations\n\n",
-    "createdAt": "2025-11-14T15:55:42.832Z",
-    "updatedAt": "2025-11-14T15:55:42.832Z"
+    "updatedAt": "2025-11-14T18:40:30.000Z"
   },
   {
     "id": "article-1763135785235",
     "topicId": "topic-1763135399264",
-    "title": "Getting Started with Compute Engine VMs",
-    "content": "# Compute Engine for Startups\n\n## How Many VMs Do You Need?\n- Not limited by count, but by credits/quotas\n- Focus on smart architecture over quantity\n\n## Sizing Recommendations\n- Start small (e2-micro for testing)\n- Scale up based on actual needs\n- Monitor resource usage\n\n## Multiple Apps Strategy\n- One app per VM vs. multiple apps\n- Container approach (Docker)",
+    "title": "VM Strategy: One App per VM or Many?",
+    "content": "It's a classic cloud architecture question: should you cram all your apps onto one big VM, or give each app its own tiny home? Let's break it down.\n\n### Approach 1: Multiple Apps, Single VM (The Monolith)\n\nYou run your Next.js site, your API, and your database all on one machine.\n\n-   **Pros:** Simple to start, can be cheaper initially.\n-   **Cons:**\n    -   **Poor Isolation:** If one app crashes, it can take down everything.\n    -   **Resource Contention:** A memory-hungry app can starve the others (the 'noisy neighbor' problem).\n    -   **Scaling Issues:** You have to scale the entire VM, even if only one small part of your app is busy.\n\n### Approach 2: One App, One VM (The Microservice)\n\nEach app gets its own dedicated VM.\n\n-   **Pros:**\n    -   **Strong Isolation & Security:** Apps are completely separate.\n    -   **Independent Scaling:** Scale just the part of your architecture that needs it.\n    -   **Clean Dependencies:** No library conflicts.\n-   **Cons:** More complex to manage networking between services.\n\n### A Recommended Hybrid Strategy\n\nFor a startup, the best path is to evolve.\n\n1.  **Start with Containers:** Use a single, well-sized VM and run each part of your application (frontend, backend) in a separate **Docker container**. This gives you the isolation benefits without the complexity of managing multiple VMs.\n2.  **Evolve as You Grow:** When a specific service becomes critical or needs more resources, you can easily move its Docker container to a new, dedicated VM. This approach gives you a professional, scalable foundation without over-complicating things from day one.",
     "createdAt": "2025-11-14T15:56:25.235Z",
-    "updatedAt": "2025-11-14T15:56:25.235Z"
+    "updatedAt": "2025-11-14T18:40:30.000Z"
   },
   {
     "id": "article-1763135903254",
     "topicId": "topic-1763135399264",
-    "title": "SSH and Port Forwarding with GCP VMs",
-    "content": "Content:\n\nBasic SSH connection: gcloud compute ssh\nPort forwarding for development\nAccessing localhost services remotely\n\n\n# Basic SSH\ngcloud compute ssh sandbox --zone=us-central1-a\n\n# SSH with port forwarding\ngcloud compute ssh sandbox --zone=us-central1-a -- -L 8080:localhost:3000\n\n# Exit SSH session\nexit",
+    "title": "Accessing a Dev Server on a VM with SSH Port Forwarding",
+    "content": "So you've got your Next.js dev server running on a GCP VM, but how do you actually see it? Since it's running on `localhost` *inside the VM*, you can't just point your browser to the VM's IP address. The solution is SSH port forwarding.\n\nIt creates a secure tunnel from your local machine to the VM, letting you access the VM's `localhost` as if it were your own.\n\n### The How-To Guide\n\n1.  If you're already connected to your VM, `exit` the session.\n2.  Use the following `gcloud` command to reconnect. The `-L` flag is the magic ingredient.\n\n    ```bash\n    # This forwards the VM's port 3000 to your local port 8080.\n    gcloud compute ssh YOUR_VM_NAME --zone=YOUR_ZONE -- -L 8080:localhost:3000\n    ```\n\n    *Note the extra `--` before the `-L` flag. It's required to pass the flag to the underlying SSH tool.*\n\n3.  Once reconnected, `cd` into your project directory and start the dev server as usual (`npm run dev`).\n4.  Open a browser **on your local machine** and navigate to `http://localhost:8080`.\n\nVoila! You're now securely viewing the site running on the VM.",
     "createdAt": "2025-11-14T15:58:23.254Z",
-    "updatedAt": "2025-11-14T15:58:23.254Z"
+    "updatedAt": "2025-11-14T18:40:30.000Z"
   },
   {
     "id": "article-1763136028477",
     "topicId": "topic-1763135472729",
-    "title": "Application Default Credentials (ADC) Setup",
-    "content": "Content:\n\nLocal development authentication\nProduction VM authentication\nNo API keys needed\nBest practices\n\nKey Commands:\n# Local development\ngcloud auth application-default login\n\n# Production (attach service account to VM)\n# Done via Console or gcloud commands",
+    "title": "Authenticating to Google Cloud: The Magic of ADC",
+    "content": "Handling API keys is a pain and a security risk. Application Default Credentials (ADC) is Google Cloud's strategy to solve this, and it's brilliant.\n\n### How ADC Works\n\nInstead of you managing keys, your application automatically finds credentials based on its environment.\n\n**On a Production VM:**\n-   You attach a **Service Account** to the VM when you create it.\n-   The Google client libraries in your code automatically detect this and get temporary, secure credentials from the VM's metadata server.\n-   **There are no keys to manage.**\n\n**On Your Local Machine:**\n-   You run a one-time command in your terminal: `gcloud auth application-default login`.\n-   This links the SDK to your personal Google Cloud account.\n-   The Google client libraries find these credentials automatically.\n\nThis unified approach means your code works seamlessly in both development and production with zero changes to how it authenticates.",
     "createdAt": "2025-11-14T16:00:28.477Z",
-    "updatedAt": "2025-11-14T16:00:28.477Z"
+    "updatedAt": "2025-11-14T18:40:30.000Z"
   },
   {
-    "id": "article-1763136118913",
-    "topicId": "topic-1763135496430",
-    "title": "Setting Up Node.js Development on GCP VMs",
-    "content": "Content:\n\nInstalling nvm on VMs\nManaging Node versions\nSetting default Node version\n\nKey Commands:\n\n# List installed versions\nnvm ls\n\n# Set default version\nnvm alias default v22.21.0\n\n",
-    "createdAt": "2025-11-14T16:01:58.913Z",
-    "updatedAt": "2025-11-14T16:01:58.913Z"
+    "id": "article-1763138430004",
+    "topicId": "topic-1763135523124",
+    "title": "Deploying a Next.js App to a VM with PM2 and Nginx",
+    "content": "Ready to go live? Here's a battle-tested guide to deploying a Next.js app on a Debian-based GCP VM.\n\n### 1. Prepare Your Environment\n\nFirst, get your code onto the VM and install dependencies.\n\n```bash\n# SSH into your VM\ngcloud compute ssh your-vm-name --zone=your-zone\n\n# Clone your repository\ngit clone https://github.com/your-username/gcp-cheatsheet.git\ncd gcp-cheatsheet\n\n# Install dependencies\nnpm install\n```\n\n### 2. Build for Production\n\nCreate a production-optimized build of your app.\n\n```bash\nnpm run build\n```\n\n### 3. Use a Process Manager (PM2)\n\nA process manager ensures your app stays running, even if it crashes or the server reboots. `pm2` is the standard for Node.js.\n\n```bash\n# Install pm2 globally\nsudo npm install pm2 -g\n\n# Start your app with pm2\npm2 start npm --name gcp-cheatsheet -- start\n```\n\nYour app is now running, but only on its local port (e.g., 3000). The next step makes it public.\n\n### 4. Set Up Nginx as a Reverse Proxy\n\nNginx will sit in front of your app, handling incoming traffic on the standard web ports (80/443) and forwarding it to your app's port.\n\n```bash\n# Install Nginx\nsudo apt-get update\nsudo apt-get install -y nginx\n\n# Create a new Nginx configuration file\nsudo nano /etc/nginx/sites-available/gcp-cheatsheet\n```\n\nPaste this configuration into the file. Replace `your_domain_or_ip` with your VM's external IP.\n\n```nginx\nserver {\n    listen 80;\n    server_name your_domain_or_ip;\n\n    location / {\n        proxy_pass http://localhost:3000;\n        proxy_http_version 1.1;\n        proxy_set_header Upgrade $http_upgrade;\n        proxy_set_header Connection 'upgrade';\n        proxy_set_header Host $host;\n        proxy_cache_bypass $http_upgrade;\n    }\n}\n```\n\nNow, enable the site and restart Nginx:\n\n```bash\n# Enable the config\nsudo ln -s /etc/nginx/sites-available/gcp-cheatsheet /etc/nginx/sites-enabled/\n\n# Test the config for errors\nsudo nginx -t\n\n# Restart Nginx\nsudo systemctl restart nginx\n```\n\n### 5. Configure the Firewall\n\nFinally, allow public HTTP traffic to Nginx.\n\n```bash\nsudo ufw allow 'Nginx Full'\n```\n\nYou should now be able to access your application by navigating to your VM's external IP address in a web browser!",
+    "createdAt": "2025-11-14T18:40:30.000Z",
+    "updatedAt": "2025-11-14T18:40:30.000Z"
   },
   {
-    "id": "article-1763136260127",
-    "topicId": "topic-1763135496430",
-    "title": "Running Next.js Applications on GCP",
-    "content": "Content:\n\nStarting development server\nPort forwarding workflow\nAccessing VM-hosted apps locally\n\n# On VM\nnpm run dev\n\n# On local machine (new terminal)\ngcloud compute ssh <VM-Name> --zone=<VM Region> -- -L 8080:localhost:3000\n\n# Access at http://localhost:8080",
-    "createdAt": "2025-11-14T16:04:20.127Z",
-    "updatedAt": "2025-11-14T16:04:20.127Z"
+    "id": "article-1763138430005",
+    "topicId": "topic-1763138430000",
+    "title": "Essential gcloud compute Commands",
+    "content": "A quick cheat sheet for the `gcloud compute` commands you'll use every day.\n\n### List Your VMs\nSee all virtual machine instances in your default project and zone.\n```bash\ngcloud compute instances list\n```\n\n### SSH into a VM\nThe primary way to get a terminal on your machine.\n```bash\ngcloud compute ssh YOUR_VM_NAME --zone=YOUR_ZONE\n```\n\n### SSH with Port Forwarding\nFor accessing a web server running on the VM.\n```bash\ngcloud compute ssh YOUR_VM_NAME --zone=YOUR_ZONE -- -L LOCAL_PORT:localhost:REMOTE_PORT\n```\n*Example: ` -L 8080:localhost:3000`*\n\n### Set Service Account Scopes\nModify the API permissions of a running VM without restarting it. This is crucial for giving your VM access to other Google Cloud services.\n```bash\ngcloud compute instances set-service-account YOUR_VM_NAME \\\n    --zone=YOUR_ZONE \\\n    --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/drive.readonly\n```\n*Note: `cloud-platform` gives access to most services. You can add more specific scopes like `drive.readonly` as needed.*",
+    "createdAt": "2025-11-14T18:40:30.000Z",
+    "updatedAt": "2025-11-14T18:40:30.000Z"
   }
 ]

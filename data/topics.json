@@ -1,27 +1,32 @@
 [
   {
     "id": "topic-1763135399264",
-    "name": "gcp-compute-engine",
-    "description": "Google Cloud Virtual Machines"
+    "name": "Compute Engine",
+    "description": "Guides and best practices for Google Cloud's virtual machines."
   },
   {
     "id": "topic-1763135434515",
-    "name": "gcp-project-management",
-    "description": "Industry Standard Management"
+    "name": "GCP Project Management",
+    "description": "Learn how to structure and manage your GCP projects like a pro."
   },
   {
     "id": "topic-1763135472729",
-    "name": "gcp-iam-security",
-    "description": "IAM Security and User Roles"
+    "name": "IAM & Security",
+    "description": "Everything about securing your resources and managing access."
   },
   {
     "id": "topic-1763135496430",
-    "name": "gcp-development",
-    "description": "Cloud Development"
+    "name": "Cloud Development",
+    "description": "Tips and workflows for developing your applications in the cloud."
   },
   {
     "id": "topic-1763135523124",
-    "name": "gcp-deployment",
-    "description": "Hosting and Deploying Applications"
+    "name": "Application Deployment",
+    "description": "From development to production: guides for deploying your apps on GCP."
+  },
+  {
+    "id": "topic-1763138430000",
+    "name": "GCP SDK & CLI",
+    "description": "A cheat sheet for the 'gcloud' command-line tool and other SDKs."
   }
 ]
