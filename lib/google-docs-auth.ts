@@ -1,5 +1,6 @@
 import { google } from 'googleapis';
-import { Auth, GoogleAuth } from 'google-auth-library';
+import { GoogleAuth } from 'google-auth-library';
+import type { GoogleAuth as GoogleAuthType } from 'google-auth-library';
 
 // Define the scopes required for Google Docs and Drive APIs
 const SCOPES = [
@@ -15,7 +16,7 @@ const SCOPES = [
  *
  * @returns A promise that resolves with an authorized auth client.
  */
-export async function authenticateWithGoogle(): Promise<Auth.AuthClient> {
+export async function authenticateWithGoogle(): Promise<Awaited<ReturnType<GoogleAuthType['getClient']>>> {
   const auth = new GoogleAuth({
     scopes: SCOPES,
   });

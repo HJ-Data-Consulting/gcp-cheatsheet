@@ -1,4 +1,3 @@
-import { Auth } from 'google-auth-library';
 import { drive_v3 } from 'googleapis';
 import { authenticateWithGoogle } from './google-docs-auth';
 import { parseGoogleDoc } from './google-docs-parser';
@@ -9,7 +8,7 @@ const TOPICS_FOLDER_ID = process.env.GOOGLE_DOCS_TOPICS_FOLDER_ID || '';
 const ARTICLES_FOLDER_ID = process.env.GOOGLE_DOCS_ARTICLES_FOLDER_ID || '';
 const ERRORS_FOLDER_ID = process.env.GOOGLE_DOCS_ERRORS_FOLDER_ID || '';
 
-async function listFiles(auth: Auth.AuthClient, folderId: string): Promise<drive_v3.Schema$File[]> {
+async function listFiles(auth: any, folderId: string): Promise<drive_v3.Schema$File[]> {
   const drive = new drive_v3.Drive({ auth });
   const response = await drive.files.list({
     q: `'${folderId}' in parents and mimeType='application/vnd.google-apps.document' and trashed=false`,

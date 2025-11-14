@@ -1,6 +1,6 @@
 import TurndownService from 'turndown';
 import { drive_v3, docs_v1 } from 'googleapis';
-import { Auth } from 'google-auth-library';
+import { GoogleAuth } from 'google-auth-library';
 import yaml from 'js-yaml';
 
 const turndownService = new TurndownService();
@@ -49,7 +49,7 @@ function extractFrontmatter(htmlContent: string): ParsedDocument {
  * @param fileId The ID of the Google Doc file.
  * @returns A promise that resolves with the parsed document.
  */
-export async function parseGoogleDoc(auth: Auth.AuthClient, fileId: string): Promise<ParsedDocument> {
+export async function parseGoogleDoc(auth: any, fileId: string): Promise<ParsedDocument> {
   const drive = new drive_v3.Drive({ auth });
 
   // 1. Export the Google Doc as HTML
