@@ -1,0 +1,22 @@
+# Docker-specific ignores
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Git
+.git
+.gitignore
+
+# Dependencies
+node_modules
+
+# Next.js build output
+.next
+
+# Logs and temporary files
+npm-debug.log
+*.log
+*.tgz
+
+# Local environment variables
+.env.local
