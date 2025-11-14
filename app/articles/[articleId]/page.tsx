@@ -20,7 +20,7 @@ export default async function ArticlePage({
   return (
     <div>
       <div className="mb-4">
-        <Link href="/" className="text-blue-600 hover:text-blue-700">
+        <Link href="/topics" className="text-blue-600 hover:text-blue-700">
           ← Back to Topics
         </Link>
         {topic && (

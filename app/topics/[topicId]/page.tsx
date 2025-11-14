@@ -17,7 +17,7 @@ export default async function TopicPage({
 
   return (
     <div>
-      <Link href="/" className="text-blue-600 hover:text-blue-700 mb-4 inline-block">
+      <Link href="/topics" className="text-blue-600 hover:text-blue-700 mb-4 inline-block">
         ← Back to Topics
       </Link>
       <h1 className="text-3xl font-bold mb-2">{topic.name}</h1>
