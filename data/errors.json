@@ -5,5 +5,14 @@
     "resolution": "\\---\n\nid: \"gcp-compute-engine\"\n\n\\---\n\nThis document provides an overview of Google Compute Engine, including its\n\nfeatures, benefits, and common use cases.",
     "createdAt": "2025-11-13T18:51:02.135Z",
     "updatedAt": "2025-11-13T18:51:02.135Z"
+  },
+  {
+    "id": "error-1763136400204",
+    "service": "Cloud Shell, Cloud Compute",
+    "errorCode": "-bash: gemini: command not found",
+    "errorMessage": "-bash: gemini: command not found",
+    "resolution": "1. Check for Appropriate Node Version\n\nnvm ls\n\n2. Check for Storage in cloud shell\n\ndf -h",
+    "createdAt": "2025-11-14T16:06:40.204Z",
+    "updatedAt": "2025-11-14T16:06:40.204Z"
   }
 ]

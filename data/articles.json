@@ -1,25 +1,58 @@
 [
   {
-    "id": "12RzW2fn8CBdjZGrXOBxjzzjt4XE3GJ8FYLjy4xSMT8I",
-    "title": "GCP Compute Engine",
-    "content": " ul.lst-kix\\_khj6zcmk53zn-3{list-style-type:none}ul.lst-kix\\_khj6zcmk53zn-4{list-style-type:none}ul.lst-kix\\_khj6zcmk53zn-5{list-style-type:none}.lst-kix\\_khj6zcmk53zn-5 > li:before{content:\"- \"}ul.lst-kix\\_khj6zcmk53zn-6{list-style-type:none}.lst-kix\\_khj6zcmk53zn-7 > li:before{content:\"- \"}ul.lst-kix\\_khj6zcmk53zn-0{list-style-type:none}ul.lst-kix\\_khj6zcmk53zn-1{list-style-type:none}ul.lst-kix\\_khj6zcmk53zn-2{list-style-type:none}.lst-kix\\_khj6zcmk53zn-4 > li:before{content:\"- \"}.lst-kix\\_khj6zcmk53zn-8 > li:before{content:\"- \"}ul.lst-kix\\_khj6zcmk53zn-7{list-style-type:none}ul.lst-kix\\_khj6zcmk53zn-8{list-style-type:none}.lst-kix\\_khj6zcmk53zn-6 > li:before{content:\"- \"}.lst-kix\\_khj6zcmk53zn-0 > li:before{content:\"- \"}.lst-kix\\_khj6zcmk53zn-1 > li:before{content:\"- \"}.lst-kix\\_khj6zcmk53zn-3 > li:before{content:\"- \"}.lst-kix\\_khj6zcmk53zn-2 > li:before{content:\"- \"}\n\n\\---\n\nid: \"gcp-compute-engine\"\n\n\\---\n\nThis document provides an overview of Google Compute Engine, including its\n\nfeatures, benefits, and common use cases.",
-    "createdAt": "2025-11-13T18:51:01.489Z",
-    "updatedAt": "2025-11-13T18:51:01.489Z"
+    "id": "article-1763135613426",
+    "topicId": "topic-1763135434515",
+    "title": "GCP Project Structure Best Practices",
+    "content": "# Understanding GCP Projects\n\n## What is a Project?\n- Fundamental container for all GCP resources\n- Complete isolation between projects\n- Independent billing and IAM\n\n## Best Practices\n- Separate projects for prod, dev, staging\n- Use a sandbox project for experiments\n- Never mix environments in one project\n\n## Example Structure\n\nyour-startup/\n├── app-prod\n├── app-dev\n├── app-staging\n└── sandbox",
+    "createdAt": "2025-11-14T15:53:33.426Z",
+    "updatedAt": "2025-11-14T15:53:33.426Z"
   },
   {
-    "id": "article-1763060364002",
-    "topicId": "16wKj0-GJEK034dBdmzcRvJoRbba8ZUa0__ObItv-FNU",
-    "title": "This is a test",
-    "content": "# Main COntent\n\n## Sub content\n\n### Markdown test",
-    "createdAt": "2025-11-13T18:59:24.002Z",
-    "updatedAt": "2025-11-13T18:59:24.002Z"
+    "id": "article-1763135742832",
+    "topicId": "topic-1763135434515",
+    "title": "Dev vs Prod: Environment Separation Strategy",
+    "content": "##Content:\n\n###Why separate environments matter\n###Security benefits of isolation\n###Cost management per environment\n###Scaling considerations\n\n",
+    "createdAt": "2025-11-14T15:55:42.832Z",
+    "updatedAt": "2025-11-14T15:55:42.832Z"
   },
   {
-    "id": "article-1763062398787",
-    "topicId": "16wKj0-GJEK034dBdmzcRvJoRbba8ZUa0__ObItv-FNU",
-    "title": "GCP Compute",
-    "content": "# Mark\n\n## Sub sentence\n\n### regular",
-    "createdAt": "2025-11-13T19:33:18.787Z",
-    "updatedAt": "2025-11-13T19:33:18.787Z"
+    "id": "article-1763135785235",
+    "topicId": "topic-1763135399264",
+    "title": "Getting Started with Compute Engine VMs",
+    "content": "# Compute Engine for Startups\n\n## How Many VMs Do You Need?\n- Not limited by count, but by credits/quotas\n- Focus on smart architecture over quantity\n\n## Sizing Recommendations\n- Start small (e2-micro for testing)\n- Scale up based on actual needs\n- Monitor resource usage\n\n## Multiple Apps Strategy\n- One app per VM vs. multiple apps\n- Container approach (Docker)",
+    "createdAt": "2025-11-14T15:56:25.235Z",
+    "updatedAt": "2025-11-14T15:56:25.235Z"
+  },
+  {
+    "id": "article-1763135903254",
+    "topicId": "topic-1763135399264",
+    "title": "SSH and Port Forwarding with GCP VMs",
+    "content": "Content:\n\nBasic SSH connection: gcloud compute ssh\nPort forwarding for development\nAccessing localhost services remotely\n\n\n# Basic SSH\ngcloud compute ssh sandbox --zone=us-central1-a\n\n# SSH with port forwarding\ngcloud compute ssh sandbox --zone=us-central1-a -- -L 8080:localhost:3000\n\n# Exit SSH session\nexit",
+    "createdAt": "2025-11-14T15:58:23.254Z",
+    "updatedAt": "2025-11-14T15:58:23.254Z"
+  },
+  {
+    "id": "article-1763136028477",
+    "topicId": "topic-1763135472729",
+    "title": "Application Default Credentials (ADC) Setup",
+    "content": "Content:\n\nLocal development authentication\nProduction VM authentication\nNo API keys needed\nBest practices\n\nKey Commands:\n# Local development\ngcloud auth application-default login\n\n# Production (attach service account to VM)\n# Done via Console or gcloud commands",
+    "createdAt": "2025-11-14T16:00:28.477Z",
+    "updatedAt": "2025-11-14T16:00:28.477Z"
+  },
+  {
+    "id": "article-1763136118913",
+    "topicId": "topic-1763135496430",
+    "title": "Setting Up Node.js Development on GCP VMs",
+    "content": "Content:\n\nInstalling nvm on VMs\nManaging Node versions\nSetting default Node version\n\nKey Commands:\n\n# List installed versions\nnvm ls\n\n# Set default version\nnvm alias default v22.21.0\n\n",
+    "createdAt": "2025-11-14T16:01:58.913Z",
+    "updatedAt": "2025-11-14T16:01:58.913Z"
+  },
+  {
+    "id": "article-1763136260127",
+    "topicId": "topic-1763135496430",
+    "title": "Running Next.js Applications on GCP",
+    "content": "Content:\n\nStarting development server\nPort forwarding workflow\nAccessing VM-hosted apps locally\n\n# On VM\nnpm run dev\n\n# On local machine (new terminal)\ngcloud compute ssh <VM-Name> --zone=<VM Region> -- -L 8080:localhost:3000\n\n# Access at http://localhost:8080",
+    "createdAt": "2025-11-14T16:04:20.127Z",
+    "updatedAt": "2025-11-14T16:04:20.127Z"
   }
 ]

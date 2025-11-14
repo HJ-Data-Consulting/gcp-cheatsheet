@@ -1,7 +1,27 @@
 [
   {
-    "id": "16wKj0-GJEK034dBdmzcRvJoRbba8ZUa0__ObItv-FNU",
-    "name": "Copy of GCP Compute Engine",
-    "description": "\\---\n\nid: \"gcp-compute-engine\"\n\n\\---\n\nThis document provides an overview of Google Compute Engine, including its\n\nfeatures, benefits, and common use cases."
+    "id": "topic-1763135399264",
+    "name": "gcp-compute-engine",
+    "description": "Google Cloud Virtual Machines"
+  },
+  {
+    "id": "topic-1763135434515",
+    "name": "gcp-project-management",
+    "description": "Industry Standard Management"
+  },
+  {
+    "id": "topic-1763135472729",
+    "name": "gcp-iam-security",
+    "description": "IAM Security and User Roles"
+  },
+  {
+    "id": "topic-1763135496430",
+    "name": "gcp-development",
+    "description": "Cloud Development"
+  },
+  {
+    "id": "topic-1763135523124",
+    "name": "gcp-deployment",
+    "description": "Hosting and Deploying Applications"
   }
 ]
