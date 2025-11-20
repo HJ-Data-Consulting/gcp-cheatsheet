@@ -1,101 +1,67 @@
-# GCP Cheat Sheet: Plan and Design
+# GCP Developer Platform: Plan and Design
 
-This document outlines the plan and design for the GCP Cheat Sheet website.
+This document outlines the plan and design for the GCP Developer Platform, a suite of tools including a Cheat Sheet and a "Startup in a Box" infrastructure generator.
 
 ## 1. Project Objective
 
-To create a comprehensive, searchable cheat sheet for Google Cloud Platform (GCP) services, including common errors and their solutions. The site will feature an admin panel for content management and is designed to be easily maintainable and scalable.
+To create a comprehensive platform for GCP developers that provides:
+1.  **Knowledge**: A searchable cheat sheet for services and errors.
+2.  **Tools**: Automated infrastructure generators ("Startup in a Box") to accelerate project setup.
 
 ## 2. Tech Stack
 
 *   **Framework:** Next.js (with TypeScript)
 *   **Styling:** Tailwind CSS
 *   **Backend (API):** Next.js API Routes
-*   **Database:** Start with local JSON files for simplicity, with the ability to migrate to a database like PostgreSQL or a serverless option later.
+*   **Database:** Local JSON files (initially) -> PostgreSQL/Serverless.
 *   **Search:** `fuse.js` for client-side fuzzy search.
-*   **Authentication (Admin):** A simple, secure authentication mechanism for the admin panel (e.g., NextAuth.js).
+*   **Infrastructure Tools:** Docker, Terraform, Ansible (for the "Startup in a Box" artifacts).
 
 ## 3. Data Models
 
-Content will be structured using the following models, likely stored in JSON files initially (e.g., in a `data/` directory).
+### `Topic` & `Article` & `CommonError`
+(Used for the Cheat Sheet module - see existing definitions)
 
-### `Topic`
-
-Represents a GCP service category.
-
+### `InfrastructureTemplate`
+Represents a blueprint for the Startup in a Box generator.
 ```json
 {
   "id": "string",
   "name": "string",
-  "description": "string"
-}
-```
-
-### `Article`
-
-Represents a detailed article or guide related to a topic.
-
-```json
-{
-  "id": "string",
-  "topicId": "string",
-  "title": "string",
-  "content": "string (Markdown)",
-  "createdAt": "date",
-  "updatedAt": "date"
-}
-```
-
-### `CommonError`
-
-Represents a common error, its cause, and solution.
-
-```json
-{
-  "id": "string",
-  "service": "string",
-  "errorCode": "string",
-  "errorMessage": "string",
-  "resolution": "string (Markdown)",
-  "createdAt": "date",
-  "updatedAt": "date"
+  "description": "string",
+  "components": ["vpc", "vm-dev", "vm-prod", "git-server"]
 }
 ```
 
 ## 4. Pages and Routing
 
-*   `/`: **Home Page:** Displays a welcome message and a list of all available topics.
-*   `/topics/[topicId]`: **Topic Page:** Lists all articles associated with a specific topic.
-*   `/articles/[articleId]`: **Article Page:** Displays the content of a single article.
-*   `/errors`: **Common Errors Page:** A searchable list of common GCP errors.
-*   `/search`: **Search Results Page:** Displays results from a site-wide search.
-*   `/admin`: **Admin Dashboard:** The main entry point for the admin section.
-    *   `/admin/login`: Admin login page.
-    *   `/admin/articles`: CRUD interface for articles.
-    *   `/admin/topics`: CRUD interface for topics.
-    *   `/admin/errors`: CRUD interface for common errors.
+*   `/`: **Home Page:** Dashboard linking to available tools (Cheat Sheet, Generators).
+*   `/cheatsheet`: **Cheat Sheet Home:** (Formerly `/`) Lists topics.
+    *   `/cheatsheet/topics/[topicId]`: Topic Page.
+    *   `/cheatsheet/articles/[articleId]`: Article Page.
+    *   `/cheatsheet/errors`: Common Errors.
+*   `/tools/startup-box`: **Startup in a Box Configurator:**
+    *   Form to configure the startup stack (Project Name, Region, etc.).
+    *   Generates and downloads the `installer` package.
+*   `/admin`: **Admin Dashboard:** Content management.
 
 ## 5. Core Features
 
-### 5.1. Content Management (Admin)
+### 5.1. Cheat Sheet
+*   Searchable knowledge base of GCP services and errors.
 
-*   A secure admin area accessible via `/admin`.
-*   Forms for creating, editing, and deleting topics, articles, and common errors.
-*   A rich text editor (e.g., a Markdown editor) for article and resolution content.
-
-### 5.2. Search
-
-*   A prominent search bar in the site's header.
-*   Client-side search using `fuse.js` to provide instant, fuzzy search results across all articles and errors.
-*   The search will look through titles, content, and error codes.
+### 5.2. Startup in a Box (IaaS Generator)
+*   **Web Interface**: A wizard to configure the desired infrastructure.
+*   **Output**: Generates a downloadable ZIP or Docker command containing:
+    *   `Dockerfile` (The Installer).
+    *   `main.tf` (Terraform for GCP).
+    *   `playbook.yml` (Ansible for VM setup).
+*   **One-Click Execution**: User runs the generated Docker container to provision everything.
 
 ## 6. Future Enhancements
+*   **LLM Integration**: Chat with the platform.
+*   **More Generators**: Kubernetes clusters, Serverless stacks.
 
-### 6.1. LLM-Powered Chat
-
-*   Integrate a Large Language Model (LLM) to provide a conversational interface.
-*   The LLM will be trained or provided with all the content on the site.
-*   Users can ask questions in natural language (e.g., "How do I fix a 403 error in Cloud Storage?") and get answers based on the site's knowledge base.
 
 ## 7. Development Plan
 

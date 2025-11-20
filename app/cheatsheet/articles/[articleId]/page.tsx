@@ -20,13 +20,13 @@ export default async function ArticlePage({
   return (
     <div>
       <div className="mb-4">
-        <Link href="/topics" className="text-blue-600 hover:text-blue-700">
+        <Link href="/cheatsheet/topics" className="text-blue-600 hover:text-blue-700">
           ← Back to Topics
         </Link>
         {topic && (
           <>
             {' / '}
-            <Link href={`/topics/${topic.id}`} className="text-blue-600 hover:text-blue-700">
+            <Link href={`/cheatsheet/topics/${topic.id}`} className="text-blue-600 hover:text-blue-700">
               {topic.name}
             </Link>
           </>

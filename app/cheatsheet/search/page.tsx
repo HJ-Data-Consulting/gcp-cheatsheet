@@ -49,7 +49,7 @@ export default async function SearchPage({
               <h2 className="text-xl font-semibold mb-2">
                 {result.type === 'article' ? (
                   <Link
-                    href={`/articles/${result.id}`}
+                    href={`/cheatsheet/articles/${result.id}`}
                     className="text-blue-600 hover:text-blue-700"
                   >
                     {result.title}
@@ -78,7 +78,7 @@ export default async function SearchPage({
                       .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Remove links, keep text
                       .replace(/```[\s\S]*?```/g, '') // Remove code blocks
                       .trim();
-                    
+
                     const originalLength = preview.length;
                     // Get first 200 characters
                     preview = preview.substring(0, 200);

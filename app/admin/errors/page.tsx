@@ -67,10 +67,7 @@ export default function ErrorsPage() {
                 Error Code
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Error Message
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Updated
+                Message
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Actions
@@ -84,13 +81,10 @@ export default function ErrorsPage() {
                   {error.service}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <span className="px-2 py-1 bg-red-100 text-red-800 rounded">
-                    {error.errorCode}
-                  </span>
+                  {error.errorCode}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500">{error.errorMessage}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date(error.updatedAt).toLocaleDateString()}
+                <td className="px-6 py-4 text-sm text-gray-500 truncate max-w-xs">
+                  {error.errorMessage}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <Link
@@ -117,4 +111,3 @@ export default function ErrorsPage() {
     </div>
   );
 }
-

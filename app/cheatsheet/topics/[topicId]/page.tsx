@@ -17,7 +17,7 @@ export default async function TopicPage({
 
   return (
     <div>
-      <Link href="/topics" className="text-blue-600 hover:text-blue-700 mb-4 inline-block">
+      <Link href="/cheatsheet/topics" className="text-blue-600 hover:text-blue-700 mb-4 inline-block">
         ← Back to Topics
       </Link>
       <h1 className="text-3xl font-bold mb-2">{topic.name}</h1>
@@ -30,7 +30,7 @@ export default async function TopicPage({
             {articles.map((article) => (
               <Link
                 key={article.id}
-                href={`/articles/${article.id}`}
+                href={`/cheatsheet/articles/${article.id}`}
                 className="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-shadow"
               >
                 <h3 className="text-xl font-semibold mb-2 text-blue-600">{article.title}</h3>

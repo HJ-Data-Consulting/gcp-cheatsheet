@@ -2,36 +2,26 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Article, Topic } from '@/types';
+import { Article } from '@/types';
 
 export default function ArticlesPage() {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [topics, setTopics] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchData();
+    fetchArticles();
   }, []);
 
-  const fetchData = async () => {
+  const fetchArticles = async () => {
     try {
-      const [articlesRes, topicsRes] = await Promise.all([
-        fetch('/api/admin/articles'),
-        fetch('/api/admin/topics'),
-      ]);
-      const articlesData = await articlesRes.json();
-      const topicsData = await topicsRes.json();
-      setArticles(articlesData);
-      setTopics(topicsData);
+      const res = await fetch('/api/admin/articles');
+      const data = await res.json();
+      setArticles(data);
     } catch (error) {
-      console.error('Failed to fetch data:', error);
+      console.error('Failed to fetch articles:', error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const getTopicName = (topicId: string) => {
-    return topics.find(t => t.id === topicId)?.name || topicId;
   };
 
   const handleDelete = async (id: string) => {
@@ -40,7 +30,7 @@ export default function ArticlesPage() {
     try {
       const res = await fetch(`/api/admin/articles/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        fetchData();
+        fetchArticles();
       } else {
         alert('Failed to delete article');
       }
@@ -76,9 +66,6 @@ export default function ArticlesPage() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Topic
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Updated
-              </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Actions
               </th>
@@ -90,13 +77,15 @@ export default function ArticlesPage() {
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {article.title}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500">
-                  {getTopicName(article.topicId)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date(article.updatedAt).toLocaleDateString()}
-                </td>
+                <td className="px-6 py-4 text-sm text-gray-500">{article.topicId}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <Link
+                    href={`/cheatsheet/articles/${article.id}`}
+                    className="text-gray-600 hover:text-gray-900 mr-4"
+                    target="_blank"
+                  >
+                    View
+                  </Link>
                   <Link
                     href={`/admin/articles/${article.id}`}
                     className="text-blue-600 hover:text-blue-900 mr-4"
@@ -121,4 +110,3 @@ export default function ArticlesPage() {
     </div>
   );
 }
-

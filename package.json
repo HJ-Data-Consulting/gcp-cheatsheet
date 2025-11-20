@@ -21,6 +21,7 @@
     "google-auth-library": "^10.5.0",
     "googleapis": "^166.0.0",
     "js-yaml": "^4.1.1",
+    "lucide-react": "^0.554.0",
     "next": "^14.2.18",
     "next-auth": "^4.24.13",
     "postcss": "^8.5.6",

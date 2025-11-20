@@ -16,7 +16,7 @@ export default async function TopicsPage() {
           {topics.map((topic) => (
             <Link
               key={topic.id}
-              href={`/topics/${topic.id}`}
+              href={`/cheatsheet/topics/${topic.id}`}
               className="block bg-white p-6 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all"
             >
               <h3 className="text-xl font-semibold mb-2 text-blue-600">{topic.name}</h3>
