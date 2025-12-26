@@ -1,10 +1,10 @@
-# GCP Developer Platform: Plan and Design
+# Minimalist's Guide to the Cloud: Plan and Design
 
-This document outlines the plan and design for the GCP Developer Platform, a suite of tools including a Cheat Sheet and a "Startup in a Box" infrastructure generator.
+This document outlines the plan and design for the Minimalist's Guide to the Cloud, a suite of tools including a Cheat Sheet and a "Startup in a Box" infrastructure generator.
 
 ## 1. Project Objective
 
-To create a comprehensive platform for GCP developers that provides:
+To create a comprehensive platform for developers that provides:
 1.  **Knowledge**: A searchable cheat sheet for services and errors.
 2.  **Tools**: Automated infrastructure generators ("Startup in a Box") to accelerate project setup.
 

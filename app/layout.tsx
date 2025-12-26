@@ -5,8 +5,8 @@ import Footer from "@/components/Footer";
 import SessionProvider from "@/components/providers/SessionProvider";
 
 export const metadata: Metadata = {
-  title: "GCP Developer Platform",
-  description: "Comprehensive toolkit for Google Cloud Platform developers",
+  title: "Minimalist's Guide to the Cloud",
+  description: "A streamlined, no-nonsense guide and toolkit for cloud development.",
 };
 
 export default function RootLayout({

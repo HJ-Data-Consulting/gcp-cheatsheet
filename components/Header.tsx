@@ -7,7 +7,7 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="text-2xl font-bold text-blue-600 hover:text-blue-700">
-            GCP Platform
+            Minimalist&apos;s Guide
           </Link>
           <nav className="flex items-center gap-6">
             <Link href="/cheatsheet" className="text-gray-700 dark:text-gray-300 hover:text-blue-600">

@@ -1,6 +1,6 @@
-# GCP Cheat Sheet
+# Minimalist's Guide to the Cloud
 
-A comprehensive, searchable cheat sheet for Google Cloud Platform (GCP) services, including common errors and their solutions.
+The essential toolkit for modern cloud developers. Knowledge, automation, and infrastructure stripped down to the essentials.
 
 ## Features
 
