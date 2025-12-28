@@ -1,69 +1,80 @@
 import Link from 'next/link';
-import { BookOpen, Box, Server, Terminal } from 'lucide-react';
+import { BookOpen, Box, Server, Terminal, Shield } from 'lucide-react';
 
 export default function Home() {
     return (
-        <main className="min-h-screen bg-slate-50 dark:bg-slate-900">
-            <div className="container mx-auto px-4 py-16">
-                <div className="text-center mb-16">
-                    <h1 className="text-5xl font-extrabold text-slate-900 dark:text-white mb-4">
-                        Minimalist&apos;s Guide to the <span className="text-blue-600">Cloud</span>
-                    </h1>
-                    <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-                        The essential toolkit for modern cloud developers. Knowledge, automation, and infrastructure stripped down to the essentials.
-                    </p>
-                </div>
+        <div className="animate-fade-in-up pb-20">
+            {/* Hero Section */}
+            <div className="text-center pt-20 pb-24 max-w-3xl mx-auto">
+                <h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-apple-dark dark:text-white mb-6">
+                    The Cloud. <span className="text-gray-400">Simplified.</span>
+                </h1>
+                <p className="text-xl md:text-2xl text-gray-500 font-normal leading-relaxed max-w-2xl mx-auto">
+                    Essential tools and knowledge for developers. <br className="hidden md:block" />
+                    No fluff. Just shipping.
+                </p>
+            </div>
 
-                <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                    {/* Cheat Sheet Card */}
-                    <Link href="/cheatsheet" className="group">
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all border border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 h-full">
-                            <div className="bg-blue-100 dark:bg-blue-900/30 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <BookOpen className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-                            </div>
-                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
-                                GCP Cheat Sheet
-                            </h2>
-                            <p className="text-slate-600 dark:text-slate-300">
-                                A searchable knowledge base of GCP services, common errors, and best practices. Stop searching StackOverflow.
+            {/* Main Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto mb-6">
+                
+                {/* Card 1: Cheat Sheet */}
+                <Link href="/cheatsheet" className="group block">
+                    <div className="card-apple h-[400px] flex flex-col justify-between relative overflow-hidden group-hover:scale-[1.01] transition-transform duration-500">
+                        <div className="z-10">
+                            <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Knowledge Base</h3>
+                            <h2 className="text-3xl font-semibold text-apple-dark dark:text-white">GCP Cheat Sheet.</h2>
+                            <p className="mt-4 text-gray-600 dark:text-gray-300 max-w-sm">
+                                A searchable index of services and solutions. Stop digging through documentation.
                             </p>
                         </div>
-                    </Link>
+                        <div className="absolute -bottom-12 -right-12 text-blue-50 opacity-10 dark:opacity-5 transform group-hover:scale-110 transition-transform duration-700">
+                             <BookOpen size={300} strokeWidth={1} />
+                        </div>
+                        <div className="mt-auto">
+                             <span className="text-apple-blue font-medium group-hover:underline">Browse Topics &rarr;</span>
+                        </div>
+                    </div>
+                </Link>
 
-                    {/* Startup in a Box Card */}
-                    <Link href="/tools/startup-box" className="group">
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all border border-slate-200 dark:border-slate-700 hover:border-purple-500 dark:hover:border-purple-400 h-full">
-                            <div className="bg-purple-100 dark:bg-purple-900/30 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <Box className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-                            </div>
-                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
-                                Startup in a Box
-                            </h2>
-                            <p className="text-slate-600 dark:text-slate-300">
-                                One-click infrastructure generator. Get a production-ready GCP stack with Dev/Prod VMs, Git, and CI/CD in seconds.
+                {/* Card 2: Startup Box */}
+                <Link href="/tools/startup-box" className="group block">
+                    <div className="card-apple h-[400px] flex flex-col justify-between relative overflow-hidden group-hover:scale-[1.01] transition-transform duration-500 bg-black text-white">
+                         <div className="z-10">
+                            <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Generator</h3>
+                            <h2 className="text-3xl font-semibold text-white">Startup in a Box.</h2>
+                            <p className="mt-4 text-gray-400 max-w-sm">
+                                Production-ready infrastructure in seconds. VPCs, VMs, and CI/CD pipelines generated for you.
                             </p>
                         </div>
-                    </Link>
-                </div>
+                         <div className="absolute -bottom-12 -right-12 text-gray-800 opacity-30 transform group-hover:scale-110 transition-transform duration-700">
+                             <Box size={300} strokeWidth={1} />
+                        </div>
+                        <div className="mt-auto">
+                             <span className="text-blue-400 font-medium group-hover:underline">Configure Now &rarr;</span>
+                        </div>
+                    </div>
+                </Link>
+            </div>
 
-                <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                    <div className="p-6">
-                        <Server className="w-10 h-10 mx-auto text-slate-400 mb-4" />
-                        <h3 className="font-semibold text-slate-900 dark:text-white">Infrastructure as Code</h3>
-                        <p className="text-sm text-slate-500 mt-2">Best-practice Terraform templates generated for you.</p>
-                    </div>
-                    <div className="p-6">
-                        <Terminal className="w-10 h-10 mx-auto text-slate-400 mb-4" />
-                        <h3 className="font-semibold text-slate-900 dark:text-white">Local Installer</h3>
-                        <p className="text-sm text-slate-500 mt-2">Run everything from a local Docker container. No dependency hell.</p>
-                    </div>
-                    <div className="p-6">
-                        <Box className="w-10 h-10 mx-auto text-slate-400 mb-4" />
-                        <h3 className="font-semibold text-slate-900 dark:text-white">Production Ready</h3>
-                        <p className="text-sm text-slate-500 mt-2">Secure VPCs, Firewalls, and VM configurations out of the box.</p>
-                    </div>
+            {/* Secondary Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <div className="card-apple p-8 flex flex-col items-center text-center">
+                    <Server className="w-12 h-12 text-gray-400 mb-4" />
+                    <h3 className="font-semibold text-apple-dark dark:text-white mb-2">Infrastructure as Code</h3>
+                    <p className="text-sm text-gray-500">Terraform templates that follow best practices by default.</p>
+                </div>
+                 <div className="card-apple p-8 flex flex-col items-center text-center">
+                    <Terminal className="w-12 h-12 text-gray-400 mb-4" />
+                    <h3 className="font-semibold text-apple-dark dark:text-white mb-2">Local First</h3>
+                    <p className="text-sm text-gray-500">Deploy from a self-contained Docker container. No messy dependencies.</p>
+                </div>
+                 <div className="card-apple p-8 flex flex-col items-center text-center">
+                    <Shield className="w-12 h-12 text-gray-400 mb-4" />
+                    <h3 className="font-semibold text-apple-dark dark:text-white mb-2">Secure by Design</h3>
+                    <p className="text-sm text-gray-500"> VPCs, firewalls, and IAM roles configured for production safety.</p>
                 </div>
             </div>
-        </main>
+        </div>
     );
 }

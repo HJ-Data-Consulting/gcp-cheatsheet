@@ -3,70 +3,59 @@
 @tailwind utilities;
 
 :root {
-  --background: #fafafa;
-  --foreground: #202124;
-  --google-blue: #4285f4;
-  --google-red: #ea4335;
-  --google-yellow: #fbbc04;
-  --google-green: #34a853;
+  --background: #ffffff;
+  --foreground: #1d1d1f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #000000;
+    --foreground: #f5f5f7;
+  }
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Courier New', monospace;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Code blocks styling */
-code {
-  font-family: 'Courier New', monospace;
-  font-size: 0.875rem;
-  line-height: 1.5;
-}
-
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Custom utilities */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+  
+  /* Apple-style backdrop blur for headers */
+  .glass-nav {
+    background-color: rgba(255, 255, 255, 0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .dark .glass-nav {
+    background-color: rgba(0, 0, 0, 0.72);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
 }
 
-/* Google-style shadows */
+/* Custom Component Classes */
 @layer components {
-  .shadow-google {
-    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+  .section-title {
+    @apply text-4xl md:text-5xl font-semibold tracking-tight text-apple-dark dark:text-white mb-6;
   }
   
-  .shadow-google-lg {
-    box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+  .section-subtitle {
+    @apply text-xl md:text-2xl text-gray-500 font-normal leading-relaxed max-w-3xl mx-auto;
+  }
+
+  .card-apple {
+    @apply bg-white dark:bg-gray-900 rounded-3xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300;
   }
   
-  /* Notebook style with lined background */
-  .notebook-card {
-    background-image: 
-      repeating-linear-gradient(
-        transparent,
-        transparent 31px,
-        #e5e7eb 31px,
-        #e5e7eb 32px
-      );
-    background-color: #fefefe;
-    position: relative;
-  }
-  
-  .notebook-card::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: currentColor;
+  .btn-apple {
+    @apply bg-apple-blue text-white rounded-full px-6 py-2 font-medium text-sm hover:bg-apple-blue-hover transition-colors duration-200;
   }
 }
-

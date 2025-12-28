@@ -19,7 +19,7 @@ export default function RootLayout({
       <body className="flex flex-col min-h-screen">
         <SessionProvider>
           <Header />
-          <main className="flex-grow container mx-auto px-4 py-8">
+          <main className="flex-grow container mx-auto px-4">
             {children}
           </main>
           <Footer />
